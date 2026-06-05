@@ -1,0 +1,45 @@
+{% extends "base_public.html" %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-5 col-md-7">
+        <div class="card border-0 shadow-sm mt-4">
+            <div class="card-body p-4">
+                <div class="text-center mb-4">
+                    <i class="bi bi-collection-fill fs-1 text-primary"></i>
+                    <h3 class="fw-bold mt-2">Welcome Back</h3>
+                    <p class="text-muted">Sign in to manage your queues</p>
+                </div>
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    <div class="mb-3">
+                        <label class="form-label fw-medium">{{ form.login_id.label.text }}</label>
+                        {{ form.login_id(class="form-control form-control-lg", placeholder="Enter email or phone number") }}
+                        {% for error in form.login_id.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-medium">{{ form.password.label.text }}</label>
+                        {{ form.password(class="form-control form-control-lg", placeholder="Enter password") }}
+                        {% for error in form.password.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
+                    </div>
+                    <div class="mb-3 form-check">
+                        {{ form.remember(class="form-check-input") }}
+                        <label class="form-check-label">{{ form.remember.label.text }}</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
+                    </button>
+                    <div class="text-center">
+                        <a href="{{ url_for('auth.forgot_password') }}" class="text-muted small">Forgot Password?</a>
+                    </div>
+                    <hr>
+                    <div class="text-center">
+                        <span class="text-muted small">Don't have an account?</span>
+                        <a href="{{ url_for('auth.register') }}" class="small">Register here</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

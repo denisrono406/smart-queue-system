@@ -1,0 +1,48 @@
+{% extends "base_admin.html" %}
+{% block title %}Create Service Desk{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="d-flex align-items-center mb-4">
+            <a href="{{ url_for('admin.list_service_desks') }}" class="btn btn-sm btn-outline-secondary me-3"><i class="bi bi-arrow-left"></i></a>
+            <h4 class="fw-bold mb-0">Create Service Desk</h4>
+        </div>
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    <div class="row">
+                        <div class="col-md-7 mb-3">
+                            <label class="form-label fw-medium">{{ form.name.label.text }}</label>
+                            {{ form.name(class="form-control", placeholder="e.g., Reception Desk, Loans Desk") }}
+                            {% for e in form.name.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-5 mb-3">
+                            <label class="form-label fw-medium">{{ form.prefix.label.text }}</label>
+                            {{ form.prefix(class="form-control", placeholder="e.g., REC, LOA", maxlength=10) }}
+                            {% for e in form.prefix.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+                            <div class="form-text">Used in ticket numbers (e.g., REC001)</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-medium">{{ form.department_id.label.text }}</label>
+                            {{ form.department_id(class="form-select") }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-medium">{{ form.desk_number.label.text }}</label>
+                            {{ form.desk_number(class="form-control", type="number") }}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-medium">{{ form.description.label.text }}</label>
+                        {{ form.description(class="form-control", rows=2, placeholder="Optional description") }}
+                    </div>
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1"></i>Create Desk</button>
+                    <a href="{{ url_for('admin.list_service_desks') }}" class="btn btn-outline-secondary ms-2">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

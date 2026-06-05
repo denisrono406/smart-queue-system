@@ -1,0 +1,84 @@
+{% extends "base_admin.html" %}
+{% block title %}Create Organization{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="d-flex align-items-center mb-4">
+            <a href="{{ url_for('admin.list_organizations') }}" class="btn btn-sm btn-outline-secondary me-3"><i class="bi bi-arrow-left"></i></a>
+            <h4 class="fw-bold mb-0">Create Organization</h4>
+        </div>
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-medium">{{ form.name.label.text }}</label>
+                            {{ form.name(class="form-control", placeholder="Organization name") }}
+                            {% for e in form.name.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-medium">{{ form.org_type.label.text }}</label>
+                            {{ form.org_type(class="form-select") }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-medium">{{ form.email.label.text }}</label>
+                            {{ form.email(class="form-control", placeholder="org@example.com") }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-medium">{{ form.phone.label.text }}</label>
+                            {{ form.phone(class="form-control", placeholder="+1234567890") }}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-medium">{{ form.address.label.text }}</label>
+                        {{ form.address(class="form-control", rows=2, placeholder="Full address") }}
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label fw-medium">Working Hours Start</label>
+                            {{ form.working_hours_start(class="form-control", type="time") }}
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label fw-medium">Working Hours End</label>
+                            {{ form.working_hours_end(class="form-control", type="time") }}
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label fw-medium">{{ form.max_queue_size.label.text }}</label>
+                            {{ form.max_queue_size(class="form-control", type="number") }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label fw-medium">{{ form.ticket_prefix.label.text }}</label>
+                            {{ form.ticket_prefix(class="form-control", placeholder="Optional global prefix") }}
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label fw-medium">{{ form.avg_service_time_minutes.label.text }}</label>
+                            {{ form.avg_service_time_minutes(class="form-control", type="number") }}
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label fw-medium">{{ form.reminder_threshold.label.text }}</label>
+                            {{ form.reminder_threshold(class="form-control", type="number") }}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-check form-check-inline">
+                            {{ form.enable_priority_queue(class="form-check-input") }}
+                            <label class="form-check-label">{{ form.enable_priority_queue.label.text }}</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            {{ form.enable_qr_code(class="form-check-input") }}
+                            <label class="form-check-label">{{ form.enable_qr_code.label.text }}</label>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1"></i>Create Organization</button>
+                    <a href="{{ url_for('admin.list_organizations') }}" class="btn btn-outline-secondary ms-2">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

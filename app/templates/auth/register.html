@@ -1,0 +1,64 @@
+{% extends "base_public.html" %}
+{% block title %}Register{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8">
+        <div class="card border-0 shadow-sm mt-4">
+            <div class="card-body p-4">
+                <div class="text-center mb-4">
+                    <i class="bi bi-person-plus fs-1 text-primary"></i>
+                    <h3 class="fw-bold mt-2">Create Account</h3>
+                    <p class="text-muted">Join Smart Queue to manage your visits</p>
+                </div>
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-medium">{{ form.first_name.label.text }}</label>
+                            {{ form.first_name(class="form-control", placeholder="First name") }}
+                            {% for error in form.first_name.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-medium">{{ form.last_name.label.text }}</label>
+                            {{ form.last_name(class="form-control", placeholder="Last name") }}
+                            {% for error in form.last_name.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-medium">{{ form.email.label.text }}</label>
+                        {{ form.email(class="form-control", placeholder="Email (optional if phone provided)") }}
+                        {% for error in form.email.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-medium">{{ form.phone.label.text }}</label>
+                        {{ form.phone(class="form-control", placeholder="Phone (optional if email provided)") }}
+                        {% for error in form.phone.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-medium">{{ form.password.label.text }}</label>
+                        {{ form.password(class="form-control", placeholder="Min 8 chars, upper, lower, number, special") }}
+                        {% for error in form.password.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-medium">{{ form.confirm_password.label.text }}</label>
+                        {{ form.confirm_password(class="form-control", placeholder="Confirm password") }}
+                        {% for error in form.confirm_password.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-medium">{{ form.organization_id.label.text }}</label>
+                        {{ form.organization_id(class="form-select") }}
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg w-100">
+                        <i class="bi bi-person-check me-2"></i>Create Account
+                    </button>
+                    <hr>
+                    <div class="text-center">
+                        <span class="text-muted small">Already have an account?</span>
+                        <a href="{{ url_for('auth.login') }}" class="small">Sign in</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

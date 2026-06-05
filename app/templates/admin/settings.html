@@ -1,0 +1,104 @@
+{% extends "base_admin.html" %}
+{% block title %}Settings{% endblock %}
+{% block content %}
+<div class="mb-4">
+    <h4 class="fw-bold">Organization Settings</h4>
+    <p class="text-muted mb-0">Configure {{ org.name }}</p>
+</div>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-transparent">
+                    <h6 class="fw-semibold mb-0"><i class="bi bi-shield-lock me-2"></i>Authentication</h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label fw-medium">Min Password Length</label>
+                        {{ form.password_min_length(class="form-control", type="number", min=6, max=20) }}
+                    </div>
+                    <div class="form-check mb-2">
+                        {{ form.password_require_uppercase(class="form-check-input") }}
+                        <label class="form-check-label">Require Uppercase Letter</label>
+                    </div>
+                    <div class="form-check mb-2">
+                        {{ form.password_require_lowercase(class="form-check-input") }}
+                        <label class="form-check-label">Require Lowercase Letter</label>
+                    </div>
+                    <div class="form-check mb-2">
+                        {{ form.password_require_number(class="form-check-input") }}
+                        <label class="form-check-label">Require Number</label>
+                    </div>
+                    <div class="form-check">
+                        {{ form.password_require_special(class="form-check-input") }}
+                        <label class="form-check-label">Require Special Character</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-transparent">
+                    <h6 class="fw-semibold mb-0"><i class="bi bi-people me-2"></i>Queue Settings</h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label fw-medium">Max Queue Size</label>
+                        {{ form.max_queue_size(class="form-control", type="number") }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-medium">Avg Service Time (minutes)</label>
+                        {{ form.avg_service_time(class="form-control", type="number") }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-medium">Reminder Threshold (people ahead)</label>
+                        {{ form.reminder_threshold(class="form-control", type="number") }}
+                    </div>
+                    <div class="form-check">
+                        {{ form.enable_priority_queue(class="form-check-input") }}
+                        <label class="form-check-label">Enable Priority Queue</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-transparent">
+                    <h6 class="fw-semibold mb-0"><i class="bi bi-bell me-2"></i>Notifications</h6>
+                </div>
+                <div class="card-body">
+                    <div class="form-check mb-2">
+                        {{ form.email_notifications(class="form-check-input") }}
+                        <label class="form-check-label">Email Notifications</label>
+                    </div>
+                    <div class="form-check">
+                        {{ form.sms_notifications(class="form-check-input") }}
+                        <label class="form-check-label">SMS Notifications (requires Twilio)</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-transparent">
+                    <h6 class="fw-semibold mb-0"><i class="bi bi-ticket-perforated me-2"></i>Ticket Settings</h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label fw-medium">Global Ticket Prefix</label>
+                        {{ form.ticket_prefix(class="form-control", maxlength=10, placeholder="Optional prefix for all tickets") }}
+                    </div>
+                    <div class="form-check mb-2">
+                        {{ form.enable_qr_code(class="form-check-input") }}
+                        <label class="form-check-label">Enable QR Code on Tickets</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mt-4">
+        <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1"></i>Save Settings</button>
+    </div>
+</form>
+{% endblock %}

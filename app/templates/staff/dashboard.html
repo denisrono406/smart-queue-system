@@ -1,0 +1,40 @@
+{% extends "base_admin.html" %}
+{% block title %}Desk Dashboard{% endblock %}
+{% block content %}
+<div class="mb-4">
+    <h4 class="fw-bold">Service Desks</h4>
+    <p class="text-muted mb-0">Select a desk to manage its queue</p>
+</div>
+<div class="row g-3">
+    {% for info in desk_info %}
+    <div class="col-md-6 col-lg-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h6 class="fw-semibold">{{ info.desk.name }}</h6>
+                    <span class="badge bg-primary">{{ info.desk.prefix }}</span>
+                </div>
+                {% if info.current_ticket %}
+                <div class="alert alert-info py-2 mb-2">
+                    <small>Serving: <strong>{{ info.current_ticket.ticket_number }}</strong> - {{ info.current_ticket.user.full_name }}</small>
+                </div>
+                {% endif %}
+                <p class="text-muted small mb-3"><i class="bi bi-people me-1"></i>{{ info.waiting_count }} waiting</p>
+                <a href="{{ url_for('staff.view_desk', desk_id=info.desk.id) }}" class="btn btn-sm btn-primary w-100">
+                    <i class="bi bi-arrow-right me-1"></i>Manage Desk
+                </a>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body text-center py-5 text-muted">
+                <i class="bi bi-display fs-1 d-block mb-2"></i>
+                <p>No active service desks assigned.</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

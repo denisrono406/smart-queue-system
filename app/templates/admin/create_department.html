@@ -1,0 +1,30 @@
+{% extends "base_admin.html" %}
+{% block title %}Create Department{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="d-flex align-items-center mb-4">
+            <a href="{{ url_for('admin.list_departments') }}" class="btn btn-sm btn-outline-secondary me-3"><i class="bi bi-arrow-left"></i></a>
+            <h4 class="fw-bold mb-0">Create Department</h4>
+        </div>
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    <div class="mb-3">
+                        <label class="form-label fw-medium">{{ form.name.label.text }}</label>
+                        {{ form.name(class="form-control", placeholder="e.g., Finance, Outpatient") }}
+                        {% for e in form.name.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-medium">{{ form.description.label.text }}</label>
+                        {{ form.description(class="form-control", rows=3, placeholder="Department description") }}
+                    </div>
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1"></i>Create Department</button>
+                    <a href="{{ url_for('admin.list_departments') }}" class="btn btn-outline-secondary ms-2">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

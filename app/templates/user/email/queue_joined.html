@@ -1,0 +1,12 @@
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+    <h2 style="color: #1a365d;">Queue Joined Successfully</h2>
+    <p>Hello {{ ticket.user.full_name }},</p>
+    <p>You have successfully joined the <strong>{{ desk.name }}</strong> queue at <strong>{{ org.name }}</strong>.</p>
+    <table style="border-collapse: collapse; width: 100%;">
+        <tr style="background: #f0f4f8;"><td style="padding: 8px; font-weight: bold;">Ticket Number:</td><td style="padding: 8px;">{{ ticket.ticket_number }}</td></tr>
+        <tr><td style="padding: 8px; font-weight: bold;">Position:</td><td style="padding: 8px;">{{ ticket.queue_position }}</td></tr>
+        <tr style="background: #f0f4f8;"><td style="padding: 8px; font-weight: bold;">Estimated Wait:</td><td style="padding: 8px;">{{ ticket.estimated_wait_minutes }} minutes</td></tr>
+        <tr><td style="padding: 8px; font-weight: bold;">Priority:</td><td style="padding: 8px;">{{ ticket.priority_label }}</td></tr>
+    </table>
+    <p style="margin-top: 20px; color: #666; font-size: 14px;">You will be notified when your turn is approaching.</p>
+</div>

@@ -1,0 +1,65 @@
+{% extends "base_public.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="text-center mb-5 mt-4">
+            <h1 class="display-4 fw-bold text-primary mb-3">Smart Queue Management</h1>
+            <p class="lead text-muted">Join queues digitally, track your position in real-time, and skip the physical wait.</p>
+        </div>
+
+        <div class="row g-4 mb-5">
+            <div class="col-md-4">
+                <div class="card h-100 text-center border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <i class="bi bi-qr-code-scan fs-1 text-primary mb-3 d-block"></i>
+                        <h5 class="fw-semibold">Scan & Join</h5>
+                        <p class="text-muted small">Join any queue by scanning a QR code or selecting from the list below.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 text-center border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <i class="bi bi-broadcast fs-1 text-primary mb-3 d-block"></i>
+                        <h5 class="fw-semibold">Real-time Updates</h5>
+                        <p class="text-muted small">Track your position and estimated wait time in real-time without refreshing.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 text-center border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <i class="bi bi-bell fs-1 text-primary mb-3 d-block"></i>
+                        <h5 class="fw-semibold">Smart Alerts</h5>
+                        <p class="text-muted small">Get notified when your turn is approaching so you never miss it.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h4 class="fw-semibold mb-3">Available Organizations</h4>
+        <div class="row g-3">
+            {% for org in organizations %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <span class="badge bg-primary-subtle text-primary mb-2">{{ org.org_type_label }}</span>
+                        <h6 class="fw-semibold mb-1">{{ org.name }}</h6>
+                        <p class="text-muted small mb-2">
+                            {% if org.address %}<i class="bi bi-geo-alt me-1"></i>{{ org.address }}<br>{% endif %}
+                            {% if org.phone %}<i class="bi bi-telephone me-1"></i>{{ org.phone }}{% endif %}
+                        </p>
+                        <a href="{{ url_for('main.org_public_page', slug=org.slug) }}" class="btn btn-sm btn-outline-primary">View Desks</a>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="col-12">
+                <p class="text-muted">No organizations available yet.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

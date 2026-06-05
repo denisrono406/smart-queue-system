@@ -1,0 +1,90 @@
+{% extends "base_admin.html" %}
+{% block title %}Join Queue{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="d-flex align-items-center mb-4">
+            <a href="{{ url_for('user.user_dashboard') }}" class="btn btn-sm btn-outline-secondary me-3"><i class="bi bi-arrow-left"></i></a>
+            <h4 class="fw-bold mb-0">Join Queue</h4>
+        </div>
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+                <form method="POST" id="join-queue-form">
+                    {{ form.hidden_tag() }}
+                    <div class="mb-3">
+                        <label class="form-label fw-medium">{{ form.organization_id.label.text }}</label>
+                        {{ form.organization_id(class="form-select", id="org-select") }}
+                        {% for e in form.organization_id.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-medium">{{ form.service_desk_id.label.text }}</label>
+                        {{ form.service_desk_id(class="form-select", id="desk-select") }}
+                        {% for e in form.service_desk_id.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-medium">{{ form.priority.label.text }}</label>
+                        {{ form.priority(class="form-select") }}
+                    </div>
+                    <div class="mb-3" id="desk-info" style="display:none;">
+                        <div class="alert alert-info mb-0">
+                            <strong>Current Queue:</strong> <span id="waiting-count">-</span> people waiting
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg w-100">
+                        <i class="bi bi-plus-circle me-2"></i>Join Queue
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const orgSelect = document.getElementById('org-select');
+    const deskSelect = document.getElementById('desk-select');
+    const deskInfo = document.getElementById('desk-info');
+    const waitingCount = document.getElementById('waiting-count');
+
+    function loadDesks(orgId) {
+        if (!orgId) {
+            deskSelect.innerHTML = '<option value="">-- Select Organization First --</option>';
+            deskInfo.style.display = 'none';
+            return;
+        }
+        deskSelect.innerHTML = '<option value="">Loading...</option>';
+        fetch(`/user/api/service-desks/${orgId}`)
+            .then(r => r.json())
+            .then(desks => {
+                deskSelect.innerHTML = '<option value="">-- Select Service Desk --</option>';
+                desks.forEach(d => {
+                    const opt = document.createElement('option');
+                    opt.value = d.id;
+                    opt.textContent = `${d.name} (${d.prefix}) - ${d.waiting_count} waiting`;
+                    opt.dataset.count = d.waiting_count;
+                    deskSelect.appendChild(opt);
+                });
+            });
+    }
+
+    orgSelect.addEventListener('change', function() {
+        loadDesks(this.value);
+    });
+
+    deskSelect.addEventListener('change', function() {
+        const opt = this.options[this.selectedIndex];
+        if (opt && opt.dataset.count !== undefined) {
+            waitingCount.textContent = opt.dataset.count;
+            deskInfo.style.display = 'block';
+        } else {
+            deskInfo.style.display = 'none';
+        }
+    });
+
+    // Load if org already selected
+    if (orgSelect.value) loadDesks(orgSelect.value);
+});
+</script>
+{% endblock %}

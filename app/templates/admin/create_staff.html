@@ -1,0 +1,50 @@
+{% extends "base_admin.html" %}
+{% block title %}Add Staff Member{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="d-flex align-items-center mb-4">
+            <a href="{{ url_for('admin.list_staff') }}" class="btn btn-sm btn-outline-secondary me-3"><i class="bi bi-arrow-left"></i></a>
+            <h4 class="fw-bold mb-0">Add Staff Member</h4>
+        </div>
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-medium">{{ form.first_name.label.text }}</label>
+                            {{ form.first_name(class="form-control") }}
+                            {% for e in form.first_name.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-medium">{{ form.last_name.label.text }}</label>
+                            {{ form.last_name(class="form-control") }}
+                            {% for e in form.last_name.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-medium">{{ form.email.label.text }}</label>
+                        {{ form.email(class="form-control", placeholder="staff@example.com") }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-medium">{{ form.phone.label.text }}</label>
+                        {{ form.phone(class="form-control", placeholder="+1234567890") }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-medium">{{ form.password.label.text }}</label>
+                        {{ form.password(class="form-control", placeholder="Min 8 chars, upper, lower, number, special") }}
+                        {% for e in form.password.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-medium">{{ form.service_desk_id.label.text }}</label>
+                        {{ form.service_desk_id(class="form-select") }}
+                    </div>
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1"></i>Add Staff</button>
+                    <a href="{{ url_for('admin.list_staff') }}" class="btn btn-outline-secondary ms-2">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

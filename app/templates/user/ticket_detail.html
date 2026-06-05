@@ -1,0 +1,154 @@
+{% extends "base_admin.html" %}
+{% block title %}Ticket {{ ticket.ticket_number }}{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="d-flex align-items-center mb-4">
+            <a href="{{ url_for('user.user_dashboard') }}" class="btn btn-sm btn-outline-secondary me-3"><i class="bi bi-arrow-left"></i></a>
+            <h4 class="fw-bold mb-0">Ticket {{ ticket.ticket_number }}</h4>
+        </div>
+
+        <div class="card border-0 shadow-sm mb-3">
+            <div class="card-body text-center py-4">
+                {% if ticket.status == 'called' %}
+                <div class="alert alert-success mb-3">
+                    <i class="bi bi-megaphone me-2"></i><strong>Your turn! Please proceed to {{ ticket.service_desk.name }}.</strong>
+                </div>
+                {% elif ticket.status == 'serving' %}
+                <div class="alert alert-primary mb-3">
+                    <i class="bi bi-person-check me-2"></i><strong>You are being served at {{ ticket.service_desk.name }}.</strong>
+                </div>
+                {% endif %}
+                <h1 class="display-4 fw-bold text-primary mb-2">{{ ticket.ticket_number }}</h1>
+                <p class="text-muted">{{ ticket.service_desk.name }}</p>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm mb-3">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6 mb-3">
+                        <p class="text-muted small mb-1">Status</p>
+                        {% if ticket.status == 'waiting' %}<span class="badge bg-warning text-dark fs-6">Waiting</span>
+                        {% elif ticket.status == 'called' %}<span class="badge bg-info fs-6">Called</span>
+                        {% elif ticket.status == 'serving' %}<span class="badge bg-primary fs-6">Being Served</span>
+                        {% elif ticket.status == 'completed' %}<span class="badge bg-success fs-6">Completed</span>
+                        {% elif ticket.status == 'cancelled' %}<span class="badge bg-secondary fs-6">Cancelled</span>{% endif %}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <p class="text-muted small mb-1">Priority</p>
+                        <span class="badge bg-secondary fs-6">{{ ticket.priority_label }}</span>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <p class="text-muted small mb-1">Queue Position</p>
+                        <h4 class="fw-bold mb-0" id="queue-position">{{ ticket.queue_position }}</h4>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <p class="text-muted small mb-1">Estimated Wait</p>
+                        <h4 class="fw-bold mb-0" id="est-wait">{{ ticket.estimated_wait_minutes }} min</h4>
+                    </div>
+                    <div class="col-6 mb-0">
+                        <p class="text-muted small mb-1">Organization</p>
+                        <p class="mb-0">{{ ticket.organization.name }}</p>
+                    </div>
+                    <div class="col-6 mb-0">
+                        <p class="text-muted small mb-1">Joined At</p>
+                        <p class="mb-0">{{ ticket.joined_at|datetime_format }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if ticket.qr_code_data and ticket.organization.enable_qr_code %}
+        <div class="card border-0 shadow-sm mb-3">
+            <div class="card-body text-center">
+                <p class="text-muted small mb-2">Scan to verify ticket</p>
+                <img src="{{ ticket.qr_code_data }}" alt="QR Code" style="max-width:180px;">
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="d-flex gap-2">
+            {% if ticket.status == 'waiting' %}
+            <a href="{{ url_for('user.download_ticket_pdf', ticket_id=ticket.id) }}" class="btn btn-outline-primary">
+                <i class="bi bi-download me-1"></i>Download PDF
+            </a>
+            <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#cancelModal">
+                <i class="bi bi-x-circle me-1"></i>Cancel Ticket
+            </button>
+            {% elif ticket.status in ['waiting', 'called', 'serving'] %}
+            <a href="{{ url_for('user.download_ticket_pdf', ticket_id=ticket.id) }}" class="btn btn-outline-primary">
+                <i class="bi bi-download me-1"></i>Download PDF
+            </a>
+            {% endif %}
+            <button onclick="window.print()" class="btn btn-outline-secondary">
+                <i class="bi bi-printer me-1"></i>Print
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Cancel Modal -->
+<div class="modal fade" id="cancelModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Cancel Ticket</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to cancel ticket <strong>{{ ticket.ticket_number }}</strong>?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Keep Ticket</button>
+                <form method="POST" action="{{ url_for('user.cancel_ticket', ticket_id=ticket.id) }}">
+                    <button type="submit" class="btn btn-danger">Cancel Ticket</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ticketId = "{{ ticket.id }}";
+    const userId = "{{ current_user.id }}";
+    const orgId = "{{ ticket.organization_id }}";
+
+    if (typeof io !== 'undefined') {
+        const socket = io();
+        socket.emit('join_user_room', {user_id: userId});
+        socket.emit('join_org_room', {org_id: orgId});
+
+        socket.on('ticket_called', function(data) {
+            if (data.ticket_id === ticketId) {
+                document.querySelector('.card-body').innerHTML =
+                    '<div class="alert alert-success mb-3"><i class="bi bi-megaphone me-2"></i><strong>' + data.message + '</strong></div>' +
+                    '<h1 class="display-4 fw-bold text-primary mb-2">' + data.ticket_number + '</h1>';
+            }
+        });
+
+        socket.on('queue_update', function(data) {
+            const posEl = document.getElementById('queue-position');
+            const waitEl = document.getElementById('est-wait');
+            if (data.waiting_tickets) {
+                const ticket = data.waiting_tickets.find(t => t.id === ticketId);
+                if (ticket && posEl) posEl.textContent = ticket.queue_position;
+                if (ticket && waitEl) waitEl.textContent = ticket.estimated_wait_minutes + ' min';
+            }
+        });
+
+        socket.on('position_update', function(data) {
+            if (data.ticket_id === ticketId) {
+                const posEl = document.getElementById('queue-position');
+                const waitEl = document.getElementById('est-wait');
+                if (posEl) posEl.textContent = data.position;
+                if (waitEl) waitEl.textContent = data.estimated_wait_minutes + ' min';
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

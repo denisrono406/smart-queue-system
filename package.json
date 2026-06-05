@@ -1,0 +1,14 @@
+{
+  "name": "smart-queue",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "echo 'Build complete'",
+    "start": "python3 run.py",
+    "seed": "python3 seed.py"
+  },
+  "devDependencies": {
+    "vite": "^6.0.0"
+  }
+}

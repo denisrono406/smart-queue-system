@@ -1,0 +1,41 @@
+{% extends "base_admin.html" %}
+{% block title %}Notifications{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="fw-bold mb-0">Notifications</h4>
+    <form method="POST" action="{{ url_for('user.mark_all_notifications_read') }}">
+        <button type="submit" class="btn btn-sm btn-outline-secondary">Mark All Read</button>
+    </form>
+</div>
+<div class="card border-0 shadow-sm">
+    {% for notif in notifications.items %}
+    <div class="d-flex align-items-start p-3 {% if not notif.is_read %}bg-primary-subtle{% endif %} {% if not loop.last %}border-bottom{% endif %}">
+        <div class="flex-grow-1">
+            <div class="d-flex justify-content-between">
+                <h6 class="fw-{{ 'semibold' if not notif.is_read else 'normal' }} mb-1">{{ notif.title }}</h6>
+                <span class="text-muted small">{{ notif.sent_at|datetime_format('%b %d %H:%M') }}</span>
+            </div>
+            <p class="text-muted small mb-0">{{ notif.message }}</p>
+        </div>
+        {% if not notif.is_read %}
+        <form method="POST" action="{{ url_for('user.mark_notification_read', notif_id=notif.id) }}" class="ms-2">
+            <button type="submit" class="btn btn-sm btn-outline-primary"><i class="bi bi-check2"></i></button>
+        </form>
+        {% endif %}
+    </div>
+    {% else %}
+    <div class="card-body text-center py-5 text-muted">
+        <i class="bi bi-bell-slash fs-1 d-block mb-2"></i>
+        <p>No notifications yet.</p>
+    </div>
+    {% endfor %}
+</div>
+{% if notifications.has_prev or notifications.has_next %}
+<nav>
+    <ul class="pagination pagination-sm justify-content-center mt-3">
+        {% if notifications.has_prev %}<li class="page-item"><a class="page-link" href="?page={{ notifications.prev_num }}">Previous</a></li>{% endif %}
+        {% if notifications.has_next %}<li class="page-item"><a class="page-link" href="?page={{ notifications.next_num }}">Next</a></li>{% endif %}
+    </ul>
+</nav>
+{% endif %}
+{% endblock %}

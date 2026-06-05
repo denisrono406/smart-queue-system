@@ -1,0 +1,112 @@
+{% extends "base_admin.html" %}
+{% block title %}Super Admin Dashboard{% endblock %}
+{% block content %}
+<div class="mb-4">
+    <h4 class="fw-bold">System Dashboard</h4>
+    <p class="text-muted mb-0">Overview of all organizations and system metrics</p>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-3 col-sm-6">
+        <div class="card border-0 shadow-sm stat-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="text-muted small mb-1">Total Organizations</p>
+                        <h3 class="fw-bold mb-0">{{ total_orgs }}</h3>
+                    </div>
+                    <div class="stat-icon bg-primary-subtle rounded-3 p-3">
+                        <i class="bi bi-building fs-4 text-primary"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <div class="card border-0 shadow-sm stat-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="text-muted small mb-1">Active Organizations</p>
+                        <h3 class="fw-bold mb-0 text-success">{{ active_orgs }}</h3>
+                    </div>
+                    <div class="stat-icon bg-success-subtle rounded-3 p-3">
+                        <i class="bi bi-check-circle fs-4 text-success"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <div class="card border-0 shadow-sm stat-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="text-muted small mb-1">Total Users</p>
+                        <h3 class="fw-bold mb-0">{{ total_users }}</h3>
+                    </div>
+                    <div class="stat-icon bg-info-subtle rounded-3 p-3">
+                        <i class="bi bi-people fs-4 text-info"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <div class="card border-0 shadow-sm stat-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="text-muted small mb-1">Tickets Today</p>
+                        <h3 class="fw-bold mb-0">{{ total_tickets_today }}</h3>
+                    </div>
+                    <div class="stat-icon bg-warning-subtle rounded-3 p-3">
+                        <i class="bi bi-ticket-perforated fs-4 text-warning"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h5 class="fw-semibold mb-0">Recent Organizations</h5>
+    <a href="{{ url_for('admin.create_organization') }}" class="btn btn-sm btn-primary"><i class="bi bi-plus-lg me-1"></i>Add Organization</a>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Email</th>
+                    <th>Status</th>
+                    <th>Plan</th>
+                    <th>Created</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for org in recent_orgs %}
+                <tr>
+                    <td class="fw-semibold">{{ org.name }}</td>
+                    <td><span class="badge bg-primary-subtle text-primary">{{ org.org_type_label }}</span></td>
+                    <td class="text-muted">{{ org.email or '-' }}</td>
+                    <td>
+                        {% if org.is_active %}<span class="badge bg-success">Active</span>
+                        {% else %}<span class="badge bg-secondary">Inactive</span>{% endif %}
+                    </td>
+                    <td><span class="badge bg-secondary">{{ org.subscription_plan }}</span></td>
+                    <td class="text-muted small">{{ org.created_at|datetime_format('%b %d, %Y') }}</td>
+                    <td>
+                        <a href="{{ url_for('admin.edit_organization', org_id=org.id) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
