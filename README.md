@@ -11,7 +11,6 @@ Enterprise-grade multi-tenant queue management system built with Flask, supporti
 - **Priority Queues**: Emergency, PWD, Pregnant, Senior, VIP, Normal
 - **QR Code Generation**: Auto-generated QR codes on tickets with verification
 - **Real-Time Updates**: SocketIO-powered live position and status updates
-- **Notifications**: Email, SMS, and browser notifications
 - **Reports**: Daily, weekly, monthly, desk performance, queue performance (PDF/Excel)
 - **Dark Mode**: Toggle between light and dark themes
 - **Password Policy**: Configurable minimum length, uppercase, lowercase, numbers, special chars
@@ -43,16 +42,32 @@ python run.py
 
 The app runs at http://localhost:5000
 
-## Default Accounts
+## Test Login Credentials
 
-| Role | Email | Password |
-|------|-------|----------|
-| Super Admin | admin@queueapp.com | Admin@123 |
-| Org Admin (Hospital) | admin@city-general-hospital.com | Admin@123 |
-| Org Admin (Bank) | admin@national-bank.com | Admin@123 |
-| Org Admin (University) | admin@sunrise-university.com | Admin@123 |
-| Staff | staff.rec@city-general-hospital.com | Staff@123 |
-| Customer | customer@example.com | Customer@123 |
+The Smart Queue Management System includes pre-configured user accounts for testing and evaluation purposes.
+
+### Super Admin
+- Email: admin@queueapp.com
+- Password: Admin@123
+
+### Organization Admin
+- Email: admin@city-general-hospital.com
+- Password: Admin@123
+
+### Staff
+- Email: staff.reception@city-general-hospital.com
+- Password: Staff@123
+
+### Customer
+- Email: customer@example.com
+- Password: Customer@123
+
+## Access Instructions
+
+1. Open the application URL.
+2. Sign in using any of the credentials above.
+3. Each account provides access to features based on its assigned role.
+4. The Super Admin account has full system access for evaluation purposes.
 
 ## Organization Types Supported
 
@@ -119,3 +134,10 @@ Tickets use desk prefix + sequential number:
 4. Senior Citizens
 5. VIP
 6. Normal
+
+
+## Future Enhancements
+- *Notifications**: Email, SMS, and browser notifications
+- Email Alerts
+- QR-code based ticket check-in
+- Queue analytics dashboard
